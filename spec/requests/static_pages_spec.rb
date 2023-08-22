@@ -22,4 +22,24 @@ RSpec.describe "StaticPages", type: :request do
     end
   end
 
+  describe "title /home" do
+    it "Homeがタイトルに含まれること" do
+      get static_pages_home_path
+      expect(response.body).to include "<title>Home</title>"
+    end
+  end
+
+  describe "title /help" do
+    it "Helpがタイトルに含まれること" do
+      get static_pages_home_path
+      expect(response.body).to include "<title>Help</title>"
+    end
+  end
+
+  describe "title /About" do
+    it "Aboutがタイトルに含まれること" do
+      get static_pages_home_path
+      expect(response.body).to include "<title>About</title>"
+    end
+  end
 end
