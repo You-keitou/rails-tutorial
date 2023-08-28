@@ -24,6 +24,13 @@ RSpec.describe "StaticPages", type: :request do
     end
   end
 
+  describe "GET /contact" do
+    it "returns htto success" do
+      get static_pages_contact_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe "title /home" do
     it "Homeがタイトルに含まれること" do
       get static_pages_home_path
@@ -42,6 +49,13 @@ RSpec.describe "StaticPages", type: :request do
     it "Aboutがタイトルに含まれること" do
       get static_pages_about_path
       expect(response.body).to include "<title>About | #{base_title}</title>"
+    end
+  end
+
+  describe "title /Contact" do
+    it "Contactがタイトルに含まれること" do
+      get static_pages_contact_path
+      expect(response.body).to include "<title>Contact | #{base_title}</title>"
     end
   end
 end
