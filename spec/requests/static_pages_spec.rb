@@ -25,8 +25,15 @@ RSpec.describe "StaticPages", type: :request do
   end
 
   describe "GET /contact" do
-    it "returns htto success" do
+    it "returns http success" do
       get static_pages_contact_path
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe "GET /root" do
+    it "return http success" do
+      get root_url
       expect(response).to have_http_status(:success)
     end
   end
