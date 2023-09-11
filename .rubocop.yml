@@ -1,24 +1,5 @@
 inherit_from: .rubocop_todo.yml
 
-require:
-  - rubocop-rails
-  - rubocop-rspec
-  - rubocop-performance
-
-AllCops:
-  TargetRubyVersion: 2.7
-  TargetRailsVersion: 5.1.7
-  Exclude:
-    - "vendor/**/*"
-    - "bin/**/*"
-    - "db/**/*"
-    - "tmp/**/*"
-    - "node_modules/**/*"
-
-Rails:
-  Enabled: true
-inherit_from: .rubocop_todo.yml
-
 AllCops:
   Exclude:
     - db/migrate/*
@@ -46,7 +27,7 @@ Metrics/AbcSize:
   Max: 30
 
 MethodLength:
-  CountComments: false  # count full line comments?
+  CountComments: false # count full line comments?
   Max: 20
 
 ParenthesesAroundCondition:
