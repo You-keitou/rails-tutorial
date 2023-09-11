@@ -39,9 +39,9 @@ RSpec.describe 'StaticPages', type: :request do
   end
 
   describe 'title /home' do
-    it 'Homeがタイトルに含まれること' do
+    it 'titleがRuby on Rails Tutorial Sample Appであること' do
       get static_pages_home_path
-      expect(response.body).to include "<title>Home | #{base_title}</title>"
+      expect(response.body).to include "<title>#{base_title}</title>"
     end
   end
 
