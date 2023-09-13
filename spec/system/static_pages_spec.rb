@@ -8,7 +8,9 @@ RSpec.describe "StaticPages", type: :system do
   describe 'root' do
     it 'root_pathへのリンクが二つ、help、about、contactへのリンクが表示されていること' do
       visit root_path
+      signup_link = page.find_all("a[href=\"#{signup_path}\"]")
 
+      expect(signup_link.size).to eq 2
       expect(page).to have_link 'sample app', href: root_path
       expect(page).to have_link 'Home', href: home_path
       expect(page).to have_link 'Help', href: help_path
@@ -16,4 +18,6 @@ RSpec.describe "StaticPages", type: :system do
       expect(page).to have_link 'About', href: about_path
     end
   end
+
+
 end
