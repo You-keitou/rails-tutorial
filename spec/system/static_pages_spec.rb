@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "StaticPages", type: :system do
+RSpec.describe 'StaticPages', type: :system do
   before do
     driven_by(:rack_test)
   end
@@ -18,6 +18,4 @@ RSpec.describe "StaticPages", type: :system do
       expect(page).to have_link 'About', href: about_path
     end
   end
-
-
 end
