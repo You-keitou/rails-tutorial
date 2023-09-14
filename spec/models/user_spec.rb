@@ -79,5 +79,20 @@ RSpec.describe User, type: :model do
         end
       end
     end
+    # 一意性を検証
+    context '既存のユーザーと重複する' do
+      let(:dup_adress) {
+        if User.limit(1).empty?
+          FactoryBot.create(:testuser).email
+        else
+          User.limit(10).pluck(:email).sample
+        end
+      }
+      it 'validでないこと' do
+        user = User.new(email: dup_adress)
+        user.invalid?
+        expect(user.errors[:email]).to be_present
+      end
+    end
   end
 end
