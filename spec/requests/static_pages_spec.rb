@@ -5,28 +5,28 @@ RSpec.describe 'StaticPages', type: :request do
 
   describe 'GET /home' do
     it 'returns http success' do
-      get static_pages_home_path
+      get home_path
       expect(response).to have_http_status(:success)
     end
   end
 
   describe 'GET /help' do
     it 'returns http success' do
-      get static_pages_help_path
+      get help_path
       expect(response).to have_http_status(:success)
     end
   end
 
   describe 'GET /about' do
     it 'returns http success' do
-      get static_pages_about_path
+      get about_path
       expect(response).to have_http_status(:success)
     end
   end
 
   describe 'GET /contact' do
     it 'returns http success' do
-      get static_pages_contact_path
+      get contact_path
       expect(response).to have_http_status(:success)
     end
   end
@@ -40,29 +40,29 @@ RSpec.describe 'StaticPages', type: :request do
 
   describe 'title /home' do
     it 'titleがRuby on Rails Tutorial Sample Appであること' do
-      get static_pages_home_path
-      expect(response.body).to include "<title>#{base_title}</title>"
+      get home_path
+      expect(response.body).to include "<title>#{full_title}</title>"
     end
   end
 
   describe 'title /help' do
     it 'Helpがタイトルに含まれること' do
-      get static_pages_help_path
-      expect(response.body).to include "<title>Help | #{base_title}</title>"
+      get help_path
+      expect(response.body).to include "<title>#{full_title('Help')}</title>"
     end
   end
 
   describe 'title /About' do
     it 'Aboutがタイトルに含まれること' do
-      get static_pages_about_path
-      expect(response.body).to include "<title>About | #{base_title}</title>"
+      get about_path
+      expect(response.body).to include "<title>#{full_title('About')}</title>"
     end
   end
 
   describe 'title /Contact' do
     it 'Contactがタイトルに含まれること' do
-      get static_pages_contact_path
-      expect(response.body).to include "<title>Contact | #{base_title}</title>"
+      get contact_path
+      expect(response.body).to include "<title>#{full_title('Contact')}</title>"
     end
   end
 end
