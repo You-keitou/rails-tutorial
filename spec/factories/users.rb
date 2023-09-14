@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :testuser, class: User do
-    sequence(:name) { |i| "name#{i}"}
-    sequence(:email) { |i| "#{i}@example.com"}
+    name {Faker::Name.last_name}
+    email {Faker::Internet.free_email}
   end
 end
