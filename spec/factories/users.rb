@@ -64,7 +64,7 @@ def invalid_email_maker
        .map do |each_part, flag|
     if flag
       each_part.insert(each_part.length - 1,
-                       invalid_character.chars.sample)
+                       invalid_character.split(' ').sample)
     else
       each_part
     end
