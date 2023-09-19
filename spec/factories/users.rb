@@ -15,12 +15,15 @@
 #
 FactoryBot.define do
   factory :testuser, class: User do
-    name {Faker::Name.last_name}
-    email {Faker::Internet.free_email}
+    name { Faker::Name.last_name }
+    email { Faker::Internet.free_email }
+    password { Faker::Internet.password }
+    password_confirmation { password }
 
     transient do
       name_length {50}
       email_length {255}
+      password_length {6}
     end
 
     trait :email_invalid_character do
@@ -34,6 +37,16 @@ FactoryBot.define do
 
     trait :username_length_variable do
       name {random_alphbet_sequence(name_length)}
+    end
+
+    trait :non_password_user do
+      password { '' }
+      password_confirmation { '' }
+    end
+
+    trait :password_length_variable do
+      password { Faker::Internet.password(min_length: password_length, max_length: password_length, mix_case: true, special_characters: true) }
+      password_confirmation { password }
     end
   end
 end

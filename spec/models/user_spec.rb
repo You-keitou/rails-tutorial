@@ -101,4 +101,28 @@ RSpec.describe User, type: :model do
       end
     end
   end
+
+  describe 'password' do
+    context '空であった場合' do
+      it 'validでないこと' do
+        user = build(:testuser, :non_password_user)
+        user.invalid?
+        expect(user.errors[:password]).to be_present
+      end
+    end
+
+    context '長さが６の時' do
+      let(:user) { build(:testuser, :password_length_variable, password_length: 6) }
+      it 'validであること' do
+        expect(user.valid?).to be (true)
+      end
+    end
+
+    context '長さが5の時' do
+      let(:user) { build(:testuser, :password_length_variable, password_length: 5) }
+      it 'validでないこと' do
+        expect(user.invalid?).to be (true)
+      end
+    end
+  end
 end
