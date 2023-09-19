@@ -8,6 +8,10 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_users_on_email  (email) UNIQUE
+#
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
@@ -89,7 +93,8 @@ RSpec.describe User, type: :model do
         end
       }
       it 'validでないこと' do
-        user = build(:testuser, email: dup_adress)
+        # メールアドレスを大文字にする
+        user = build(:testuser, email: dup_adress.upcase)
         user.invalid?
         expect(user.errors[:email]).to be_present
       end
