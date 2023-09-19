@@ -2,7 +2,6 @@ require 'rails_helper'
 
 # 引数ありの場合、　引数なしの場合
 RSpec.describe 'full_title_helper', type: :helper do
-
   describe 'full_title' do
     let(:base_title) { 'Ruby on Rails Tutorial Sample App' }
     context '引数あり' do
@@ -21,7 +20,7 @@ RSpec.describe 'full_title_helper', type: :helper do
   describe 'invalid_email_maker' do
     let(:invalid_email) { invalid_email_maker }
     it '無効なアドレスが生成されているか' do
-      expect(/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i.match(invalid_email)).to be (nil)
+      expect(/\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i.match(invalid_email)).to be(nil)
     end
   end
 end

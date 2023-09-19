@@ -21,9 +21,9 @@ FactoryBot.define do
     password_confirmation { password }
 
     transient do
-      name_length {50}
-      email_length {255}
-      password_length {6}
+      name_length { 50 }
+      email_length { 255 }
+      password_length { 6 }
     end
 
     trait :email_invalid_character do
@@ -32,11 +32,11 @@ FactoryBot.define do
 
     trait :email_length_variable do
       domain = Faker::Internet.domain_name(subdomain: true)
-      email {random_alphbet_sequence(email_length - domain.length - 1) + '@' + domain}
+      email { "#{random_alphbet_sequence(email_length - domain.length - 1)}@#{domain}" }
     end
 
     trait :username_length_variable do
-      name {random_alphbet_sequence(name_length)}
+      name { random_alphbet_sequence(name_length) }
     end
 
     trait :non_password_user do
@@ -45,7 +45,10 @@ FactoryBot.define do
     end
 
     trait :password_length_variable do
-      password { Faker::Internet.password(min_length: password_length, max_length: password_length, mix_case: true, special_characters: true) }
+      password do
+        Faker::Internet.password(min_length: password_length, max_length: password_length, mix_case: true,
+                                 special_characters: true)
+      end
       password_confirmation { password }
     end
   end
@@ -55,13 +58,20 @@ def invalid_email_maker
   invalid_character = "! @ # $ % ^ & * ( ) = { } ¥ \' \" ' '"
   email = Faker::Internet.free_email
   # ローカル部分とドメインに無効文字を挿入するかどうか
-  insert_invalid_character_flag = [[true, true],[true, false],[false, true]]
+  insert_invalid_character_flag = [[true, true], [true, false], [false, true]]
   email.split('@')
-    .zip(insert_invalid_character_flag.sample)
-    .map{ |each_part, flag| flag ? each_part.insert(each_part.length - 1, invalid_character.chars.sample) : each_part }
-    .join('@')
+       .zip(insert_invalid_character_flag.sample)
+       .map do |each_part, flag|
+    if flag
+      each_part.insert(each_part.length - 1,
+                       invalid_character.chars.sample)
+    else
+      each_part
+    end
+  end
+       .join('@')
 end
 
 def random_alphbet_sequence(len)
-  Array.new(len){rand(26)}.map{|n| ('a'..'z').to_a[n] }.join()
+  Array.new(len) { rand(26) }.map { |n| ('a'..'z').to_a[n] }.join
 end
