@@ -5,10 +5,10 @@ RSpec.describe 'StaticPages', type: :system, js: true do
     driven_by(:rack_test)
     @invalid_user_factory_params = [
       [:email_invalid_character],
-      [:email_length_variable, email_length: 256],
-      [:username_length_variable, {name_length: 51}],
+      [:email_length_variable, { email_length: 256 }],
+      [:username_length_variable, { name_length: 51 }],
       [:non_password_user],
-      [:password_length_variable, {password_length: 5}]
+      [:password_length_variable, { password_length: 5 }]
     ]
   end
 
@@ -28,20 +28,20 @@ RSpec.describe 'StaticPages', type: :system, js: true do
 
   describe 'signup page' do
     context '無効なユーザーが送信されたとき' do
-      let(:user_attributes) { attributes_for( :testuser, *@invalid_user_factory_params.sample ) }
+      let(:user_attributes) { attributes_for(:testuser, *@invalid_user_factory_params.sample) }
       it 'エラーが表示される' do
         visit signup_path
         fill_in_form(user_attributes)
         find('input[name="commit"]').click
-        expect(page).to have_content /The form contains [0-9]+ error[s]*./
+        expect(page).to have_content(/The form contains [0-9]+ errors*./)
       end
 
       it 'ユーザーは登録されない' do
         visit signup_path
         fill_in_form(user_attributes)
-        expect{
+        expect do
           find('input[name="commit"]').click
-        }.to change { User.count }.by(0)
+        end.to change { User.count }.by(0)
       end
     end
 
@@ -51,9 +51,9 @@ RSpec.describe 'StaticPages', type: :system, js: true do
         visit signup_path
         p user_attributes
         fill_in_form(user_attributes)
-        expect{
+        expect do
           click_button 'Create my account'
-        }.to change(User, :count).by(1)
+        end.to change(User, :count).by(1)
       end
       it 'リダイレクトされる' do
         visit signup_path
@@ -65,10 +65,8 @@ RSpec.describe 'StaticPages', type: :system, js: true do
         visit signup_path
         fill_in_form(user_attributes)
         find('input[name="commit"]').click
-        expect(page).to have_selector 'div' , class: 'alert-success'
+        expect(page).to have_selector 'div', class: 'alert-success'
       end
     end
   end
-
 end
-

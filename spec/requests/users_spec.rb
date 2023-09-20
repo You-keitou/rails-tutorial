@@ -5,12 +5,12 @@ RSpec.describe 'Users', type: :request do
 
   before do
     @invalid_user_factory_params = [
-        [:email_invalid_character],
-        [:email_length_variable, email_length: 256],
-        [:username_length_variable, {name_length: 51}],
-        [:non_password_user],
-        [:password_length_variable, {password_length: 5}]
-      ]
+      [:email_invalid_character],
+      [:email_length_variable, { email_length: 256 }],
+      [:username_length_variable, { name_length: 51 }],
+      [:non_password_user],
+      [:password_length_variable, { password_length: 5 }]
+    ]
   end
 
   describe 'GET /signup' do
@@ -22,24 +22,24 @@ RSpec.describe 'Users', type: :request do
 
   describe 'post /signup' do
     context '有効なユーザー' do
-      let(:user_attributes) {  attributes_for(:testuser)  }
+      let(:user_attributes) { attributes_for(:testuser) }
       it 'DBに登録される' do
-        expect {
+        expect do
           post signup_path, params: {
             user: user_attributes
           }
-        }.to change{User.count}.by(1)
+        end.to change { User.count }.by(1)
       end
     end
 
     context '無効なユーザー' do
       let(:user_attributes) { attributes_for(:testuser, *@invalid_user_factory_params.sample) }
       it 'DBに登録されない' do
-        expect {
+        expect do
           post signup_path, params: {
             user: user_attributes
           }
-        }.to change{User.count}.by(0)
+        end.to change { User.count }.by(0)
       end
     end
   end
