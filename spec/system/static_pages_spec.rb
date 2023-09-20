@@ -65,7 +65,7 @@ RSpec.describe 'StaticPages', type: :system, js: true do
         visit signup_path
         fill_in_form(user_attributes)
         find('input[name="commit"]').click
-        expect(page).to have_selector ''
+        expect(page).to have_selector 'div' , class: 'alert-success'
       end
     end
   end
