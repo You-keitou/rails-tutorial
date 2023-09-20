@@ -55,16 +55,16 @@ FactoryBot.define do
 end
 
 def invalid_email_maker
-  invalid_character = "! @ # $ % ^ & * ( ) = { } ¥ \' \" ' '"
+  invalid_character = %w[! @ # $ % ^ & * ( ) = { } ¥ ' " \ ]
   email = Faker::Internet.email
   # ローカル部分とドメインに無効文字を挿入するかどうか
-  insert_invalid_character_flag = [[true, true], [true, false], [false, true]]
+  insert_invalid_character_flag = [[true, true], [true, false], [false, true]].sample
   email.split('@')
-       .zip(insert_invalid_character_flag.sample)
+       .zip(insert_invalid_character_flag)
        .map do |each_part, flag|
     if flag
-      each_part.insert(each_part.length - 1,
-                       invalid_character.chars.sample)
+      each_part.insert(rand(each_part.length - 1),
+                       invalid_character.sample)
     else
       each_part
     end
