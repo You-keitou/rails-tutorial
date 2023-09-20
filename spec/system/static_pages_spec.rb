@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'StaticPages', type: :system do
+RSpec.describe 'StaticPages', type: :system, js: true do
   before do
     driven_by(:rack_test)
     @invalid_user_factory_params = [
@@ -28,17 +28,17 @@ RSpec.describe 'StaticPages', type: :system do
 
   describe 'signup page' do
     context '無効なユーザーが送信されたとき' do
-      let(:user) { build( :testuser, *@invalid_user_factory_params.sample ) }
+      let(:user_attributes) { attributes_for( :testuser, *@invalid_user_factory_params.sample ) }
       it 'エラーが表示される' do
         visit signup_path
-        fill_in_form(user)
+        fill_in_form(user_attributes)
         find('input[name="commit"]').click
-        expect(page).to have_content /The form contains [0-9]+ errors./
+        expect(page).to have_content /The form contains [0-9]+ error[s]*./
       end
 
       it 'ユーザーは登録されない' do
         visit signup_path
-        fill_in_form(user)
+        fill_in_form(user_attributes)
         expect{
           find('input[name="commit"]').click
         }.to change { User.count }.by(0)
@@ -46,19 +46,20 @@ RSpec.describe 'StaticPages', type: :system do
     end
 
     context '有効なユーザーが送信されたとき' do
-      let(:user) { build(:testuser) }
+      let(:user_attributes) { attributes_for(:testuser) }
       it 'ユーザーが登録される' do
         visit signup_path
-        fill_in_form(user)
+        p user_attributes
+        fill_in_form(user_attributes)
         expect{
           click_button 'Create my account'
-        }.to change { User.count }.by(1)
+        }.to change(User, :count).by(1)
       end
       it 'リダイレクトされる' do
         visit signup_path
-        fill_in_form(user)
+        fill_in_form(user_attributes)
         find('input[name="commit"]').click
-        expect(current_path).to eq(user_path)
+        expect(current_path).to eq(user_path(User.find_by(email: user_attributes[:email])))
       end
     end
   end
