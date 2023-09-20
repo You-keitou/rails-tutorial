@@ -16,7 +16,7 @@
 FactoryBot.define do
   factory :testuser, class: User do
     name { Faker::Name.last_name }
-    email { Faker::Internet.free_email }
+    email { Faker::Internet.email }
     password { Faker::Internet.password }
     password_confirmation { password }
 
@@ -56,7 +56,7 @@ end
 
 def invalid_email_maker
   invalid_character = "! @ # $ % ^ & * ( ) = { } ¥ \' \" ' '"
-  email = Faker::Internet.free_email
+  email = Faker::Internet.email
   # ローカル部分とドメインに無効文字を挿入するかどうか
   insert_invalid_character_flag = [[true, true], [true, false], [false, true]]
   email.split('@')
