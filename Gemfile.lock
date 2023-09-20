@@ -40,11 +40,15 @@ GEM
       tzinfo (~> 1.1)
     addressable (2.8.5)
       public_suffix (>= 2.0.2, < 6.0)
+    annotate (3.2.0)
+      activerecord (>= 3.2, < 8.0)
+      rake (>= 10.4, < 14.0)
     arel (8.0.0)
     ast (2.4.2)
     autoprefixer-rails (10.4.15.0)
       execjs (~> 2)
     base64 (0.1.1)
+    bcrypt (3.1.19)
     bindex (0.8.1)
     bootstrap-sass (3.3.7)
       autoprefixer-rails (>= 5.2.1)
@@ -76,6 +80,8 @@ GEM
     factory_bot_rails (6.2.0)
       factory_bot (~> 6.2.0)
       railties (>= 5.0.0)
+    faker (3.2.1)
+      i18n (>= 1.8.11, < 2)
     ffi (1.15.5)
     globalid (1.1.0)
       activesupport (>= 5.0)
@@ -265,11 +271,14 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  annotate
+  bcrypt (~> 3.1.7)
   bootstrap-sass (= 3.3.7)
   byebug
   capybara (~> 2.13)
   coffee-rails (~> 4.2)
   factory_bot_rails
+  faker
   jbuilder (~> 2.5)
   jquery-rails (~> 4.3)
   listen (>= 3.0.5, < 3.2)
