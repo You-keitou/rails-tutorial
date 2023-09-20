@@ -50,13 +50,17 @@ RSpec.describe 'StaticPages', type: :system do
       it 'ユーザーが登録される' do
         visit signup_path
         fill_in_form(user)
-        p user
         expect{
-          find('input[name="commit"]').click
+          click_button 'Create my account'
         }.to change { User.count }.by(1)
       end
+      it 'リダイレクトされる' do
+        visit signup_path
+        fill_in_form(user)
+        find('input[name="commit"]').click
+        expect(current_path).to eq(user_path)
+      end
     end
-
   end
 
 end

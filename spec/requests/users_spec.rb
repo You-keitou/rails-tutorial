@@ -10,6 +10,19 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
+  describe 'post /signup' do
+    context '無効なユーザー' do
+      let(:user_params) {  build(:testuser).attributes  }
+      it 'DBに登録されない' do
+        expect {
+          post signup_path, params: {
+            user: user_params
+          }
+        }.to change{User.count}.by(1)
+      end
+    end
+  end
+
   describe 'title /signup' do
     it "title が #{full_title('Sign up')}となっていること" do
       get signup_path
