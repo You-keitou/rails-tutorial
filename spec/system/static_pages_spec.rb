@@ -61,6 +61,12 @@ RSpec.describe 'StaticPages', type: :system, js: true do
         find('input[name="commit"]').click
         expect(current_path).to eq(user_path(User.find_by(email: user_attributes[:email])))
       end
+      it '成功のflashが出る' do
+        visit signup_path
+        fill_in_form(user_attributes)
+        find('input[name="commit"]').click
+        expect(page).to have_selector ''
+      end
     end
   end
 
