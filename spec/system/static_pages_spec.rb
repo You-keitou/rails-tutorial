@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'StaticPages', type: :system, js: true do
+RSpec.describe 'StaticPages e2eテスト', type: :system, js: true do
   before do
     driven_by(:rack_test)
   end

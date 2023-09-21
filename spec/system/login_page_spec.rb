@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe 'login_page' do
+RSpec.describe 'login_page e2eテスト' ,type: :system, js: true do
   before do
     driven_by(:rack_test)
   end
 
-  describe 'login page' do
+  describe 'loginフォーム' do
     context '入力が無効であるとき' do
       let!(:new_user_attributes) { attributes_for(:testuser) }
       it 'エラーが表示されること' do
@@ -21,6 +21,13 @@ RSpec.describe 'login_page' do
         click_button 'Log in'
         click_on 'Home'
         expect(page).not_to have_selector 'div', class: 'alert-danger'
+      end
+
+      it 'ページ遷移が行われないこと' do
+        visit login_path
+        fill_in_form(new_user_attributes, login_form: true)
+        click_button 'Log in'
+        expect(current_path).to eq(login_path)
       end
     end
 

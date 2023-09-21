@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'sign_up', type: :system do
+RSpec.describe 'sign_up e2eテスト', type: :system, js: true do
   before do
     driven_by(:rack_test)
     @invalid_user_factory_params = [
@@ -12,7 +12,7 @@ RSpec.describe 'sign_up', type: :system do
     ]
   end
 
-  describe 'signup page' do
+  describe 'signupフォーム' do
     context '無効なユーザーが送信されたとき' do
       let(:user_attributes) { attributes_for(:testuser, *@invalid_user_factory_params.sample) }
       it 'エラーが表示される' do
