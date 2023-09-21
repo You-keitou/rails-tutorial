@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe 'support_helper test', type: :helper do
-
   describe 'invalid_email_maker' do
     let(:invalid_email) { invalid_email_maker }
     it '無効なアドレスが生成されているか' do

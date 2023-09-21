@@ -1,10 +1,9 @@
 require 'rails_helper'
 
 RSpec.describe 'login_page' do
-	before do
-		driven_by(:rack_test)
-	end
-
+  before do
+    driven_by(:rack_test)
+  end
 
   describe 'login page' do
     context '入力が無効であるとき' do

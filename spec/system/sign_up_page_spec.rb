@@ -1,17 +1,16 @@
 require 'rails_helper'
 
 RSpec.describe 'sign_up', type: :system do
-	before do
-		driven_by(:rack_test)
-		@invalid_user_factory_params = [
-		[:email_invalid_character],
-		[:email_length_variable, { email_length: 256 }],
-		[:username_length_variable, { name_length: 51 }],
-		[:non_password_user],
-		[:password_length_variable, { password_length: 5 }]
-		]
-	end
-
+  before do
+    driven_by(:rack_test)
+    @invalid_user_factory_params = [
+      [:email_invalid_character],
+      [:email_length_variable, { email_length: 256 }],
+      [:username_length_variable, { name_length: 51 }],
+      [:non_password_user],
+      [:password_length_variable, { password_length: 5 }]
+    ]
+  end
 
   describe 'signup page' do
     context '無効なユーザーが送信されたとき' do
