@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'login_page e2eテスト' ,type: :system, js: true do
+RSpec.describe 'login_page e2eテスト', type: :system, js: true do
   before do
     driven_by(:rack_test)
   end
@@ -33,11 +33,11 @@ RSpec.describe 'login_page e2eテスト' ,type: :system, js: true do
 
     context '入力が有効であること' do
       let!(:new_user_attributes) { attributes_for(:testuser) }
-      let!(:new_user) {create(:testuser, new_user_attributes)}
+      let!(:new_user) { create(:testuser, new_user_attributes) }
       it 'ユーザーページにリダイレクトされること' do
         visit login_path
         fill_in_form(new_user_attributes, login_form: true)
-        expect{click_button 'Log in'}.to change{current_path}.from(login_path).to(user_path(new_user))
+        expect { click_button 'Log in' }.to change { current_path }.from(login_path).to(user_path(new_user))
       end
     end
   end

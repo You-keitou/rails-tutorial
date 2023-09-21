@@ -33,7 +33,7 @@ RSpec.describe 'Users_controller', type: :request do
 
       it 'ログイン状態になること' do
         post signup_path, params: {
-            user: user_attributes
+          user: user_attributes
         }
         expect(logged_in?).to be(true)
       end

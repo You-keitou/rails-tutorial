@@ -10,10 +10,10 @@ RSpec.describe 'Sessions_controller', type: :request do
 
   describe 'POST /login' do
     context '有効な値の場合' do
-      let(:user_attributes) {attributes_for(:testuser)}
+      let(:user_attributes) { attributes_for(:testuser) }
       it 'ログイン状態になること' do
         User.create(user_attributes)
-        post login_path, params:{
+        post login_path, params: {
           session: user_attributes.slice(:email, :password)
         }
         expect(logged_in?).to be(true)
@@ -21,9 +21,9 @@ RSpec.describe 'Sessions_controller', type: :request do
     end
 
     context '無効な値の場合' do
-      let(:user_attributes) {attributes_for(:testuser)}
+      let(:user_attributes) { attributes_for(:testuser) }
       it 'ログイン状態にならないこと' do
-        post login_path, params:{
+        post login_path, params: {
           session: user_attributes.slice(:email, :password)
         }
         expect(logged_in?).to be(false)
@@ -32,11 +32,11 @@ RSpec.describe 'Sessions_controller', type: :request do
   end
 
   describe 'DELETE /login' do
-    let!(:user_attributes) {attributes_for(:testuser)}
-    let!(:user) {create(:testuser, user_attributes)}
+    let!(:user_attributes) { attributes_for(:testuser) }
+    let!(:user) { create(:testuser, user_attributes) }
     it 'ログイン状態からログアウト状態になること' do
-      post login_path, params:{
-          session: user_attributes.slice(:email, :password)
+      post login_path, params: {
+        session: user_attributes.slice(:email, :password)
       }
       expect(logged_in?).to be(true)
       delete logout_path
