@@ -30,29 +30,9 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 
-Capybara.register_driver :remote_chrome do |app|
-  url = 'http://chrome:4444/wd/hub'
-  caps = ::Selenium::WebDriver::Remote::Capabilities.chrome(
-    'goog:chromeOptions' => {
-      'args' => [
-        'no-sandbox',
-        'disable-gpu',
-        'window-size=1680,1050'
-      ]
-    }
-  )
-  Capybara::Selenium::Driver.new(app, browser: :remote, url: url, desired_capabilities: caps)
-end
-
 RSpec.configure do |config|
   include ApplicationHelper
-
-  config.before(:each, type: :system, js: true) do
-    driven_by :remote_chrome
-    Capybara.server_host = IPSocket.getaddress(Socket.gethostname)
-    Capybara.server_port = 3000
-    Capybara.app_host = "http://#{Capybara.server_host}:#{Capybara.server_port}"
-  end
+  include SessionsHelper
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = Rails.root.join('spec/fixtures').to_s
 
