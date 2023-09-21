@@ -40,11 +40,12 @@ RSpec.describe 'sign_up', type: :system do
           click_button 'Create my account'
         end.to change(User, :count).by(1)
       end
-      it 'リダイレクトされる' do
+      it 'ログインしている状態でリダイレクトされる' do
         visit signup_path
         fill_in_form(user_attributes, signup_form: true)
         find('input[name="commit"]').click
         expect(current_path).to eq(user_path(User.find_by(email: user_attributes[:email])))
+        expect(page).to have_link 'Log out', href: logout_path
       end
       it '成功のflashが出る' do
         visit signup_path
