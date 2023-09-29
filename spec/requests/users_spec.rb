@@ -11,61 +11,69 @@ RSpec.describe 'Users', type: :request do
   end
 
   describe 'post /signup' do
-    let(:user_attributes) { {
+    let(:base_user_attributes) do
+      {
         name: 'keito',
         email: 'k.you@ingage.jp',
         password: '123456',
         password_confirmation: '123456'
-    } }
+      }
+    end
     context '有効なユーザー' do
       it 'DBに登録されること' do
         expect do
           post signup_path, params: {
-            user: user_attributes
+            user: base_user_attributes
           }
         end.to change { User.count }.by(1)
       end
     end
 
     context '名前が無効なユーザー' do
-      let(:invalid_user_attributes) { {
-        name: 'a' * 51,
-        user_attributes.except(:name)
-      }}
+      let(:invalid_user_attributes) do
+        {
+          name: 'a' * 51,
+          **base_user_attributes.except(:name)
+        }
+      end
       it 'DBに登録されないこと' do
         expect do
           post signup_path, params: {
-            user: user_attributes
+            user: invalid_user_attributes
           }
         end.to change { User.count }.by(0)
       end
     end
 
     context 'メールアドレスが無効なユーザー' do
-      let(:invalid_user_attributes) { {
-        email: 'a' * 244 + '@example.com',
-        user_attributes.except(:email)
-      }}
+      let(:invalid_user_attributes) do
+        {
+          email: '$$you@example.com',
+          **base_user_attributes.except(:email)
+        }
+      end
       it 'DBに登録されないこと' do
         expect do
           post signup_path, params: {
-            user: user_attributes
+            user: invalid_user_attributes
           }
-        end .to change { User.count }.by(0)
+        end.to change { User.count }.by(0)
       end
     end
 
     context 'パスワードが無効なユーザー' do
-      let(:invalid_user_attributes) { {
-        password: 'a' * 5,
-        user_attributes.except(:password)
-      }}
+      let(:invalid_user_attributes) do
+        {
+          password: 'a' * 5,
+          **base_user_attributes.except(:password)
+        }
+      end
       it 'DBに登録されないこと' do
         expect do
           post signup_path, params: {
-            user: user_attributes
+            user: invalid_user_attributes
           }
-        end .to change { User.count }.by(0)
+        end.to change { User.count }.by(0)
       end
     end
   end

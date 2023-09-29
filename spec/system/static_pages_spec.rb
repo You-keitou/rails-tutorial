@@ -12,13 +12,14 @@ RSpec.describe 'StaticPages', type: :system, js: true do
   before do
     driven_by(:rack_test)
   end
-  let(:base_user_attributes) {
-  {
-    name: 'keito',
-    email: 'k.you@example.jp',
-    password: '123456',
-    password_confirmation: '123456'
-  }}
+  let(:base_user_attributes) do
+    {
+      name: 'keito',
+      email: 'k.you@example.jp',
+      password: '123456',
+      password_confirmation: '123456'
+    }
+  end
 
   describe 'root' do
     it 'root_pathへのリンクが二つ、help、about、contactへのリンクが表示されていること' do
@@ -37,16 +38,20 @@ RSpec.describe 'StaticPages', type: :system, js: true do
   describe 'signup page' do
     shared_context '無効なユーザーを入力する' do |invalid_attr, invalid_attr_value|
       if invalid_attr != :password
-        let(:invalid_user_attributes) {{
-          invalid_attr => invalid_attr_value,
-          **base_user_attributes.except(invalid_attr)
-        }}
+        let(:invalid_user_attributes) do
+          {
+            invalid_attr => invalid_attr_value,
+            **base_user_attributes.except(invalid_attr)
+          }
+        end
       else
-        let(:invalid_user_attributes) {{
-          password: invalid_attr_value,
-          password_confirmation: invalid_attr_value,
-          **base_user_attributes.except(:password, :password_confirmation)
-        }}
+        let(:invalid_user_attributes) do
+          {
+            password: invalid_attr_value,
+            password_confirmation: invalid_attr_value,
+            **base_user_attributes.except(:password, :password_confirmation)
+          }
+        end
       end
     end
 
@@ -73,7 +78,7 @@ RSpec.describe 'StaticPages', type: :system, js: true do
     end
 
     context 'メールアドレスが無効なユーザーが送信されたとき' do
-      include_context '無効なユーザーを入力する', :email, 'a' * 244 + '@example.com'
+      include_context '無効なユーザーを入力する', :email, "#{'a' * 244}@example.com"
       it_behaves_like 'エラーが発生する'
     end
 
