@@ -1,10 +1,9 @@
 module SessionsHelper
-  #ユーザー検証
+  # ユーザー検証
   def authenticate_user!
-    if current_user.nil?
-      if remembered_user && User.remember_token_authenticated?(remembered_user ,cookies[:remember_token])
-        log_in(remembered_user)
-      end
+    if current_user.nil? && (remembered_user && User.remember_token_authenticated?(remembered_user,
+                                                                                   cookies[:remember_token]))
+      log_in(remembered_user)
     end
   end
 
@@ -14,6 +13,7 @@ module SessionsHelper
 
   def log_out
     return if current_user.nil?
+
     forget(current_user)
     session.delete(:user_id)
   end
@@ -32,15 +32,14 @@ module SessionsHelper
 
   def current_user
     # ユーザーが見つからなかった時の処理はどうするか？
-    return User.find_by(id: session[:user_id]) if session[:user_id]
+    User.find_by(id: session[:user_id]) if session[:user_id]
   end
 
   def remembered_user
-    return User.find_by(id: cookies.signed[:user_id]) if user_id = cookies.signed[:user_id]
+    User.find_by(id: cookies.signed[:user_id]) if cookies.signed[:user_id]
   end
 
   def logged_in?
     !current_user.nil?
   end
-
 end

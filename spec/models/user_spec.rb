@@ -131,7 +131,7 @@ RSpec.describe User, type: :model do
     let(:user) { build(:testuser) }
     it 'remember_tokenがnilであるときはfalseを返すこと' do
       expect(user.remember_token).to be_nil
-      expect(User::remember_token_authenticated?(user, ''))
+      expect(User.remember_token_authenticated?(user, ''))
     end
   end
 end

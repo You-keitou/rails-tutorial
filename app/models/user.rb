@@ -15,7 +15,7 @@
 #  index_users_on_email  (email) UNIQUE
 #
 class User < ApplicationRecord
-  #tutorialでは、accessorにしていたが、外部から書き込みができるようにするべきではないと思った。
+  # tutorialでは、accessorにしていたが、外部から書き込みができるようにするべきではないと思った。
   attr_reader :remember_token
 
   before_save { self.email = email.downcase }
@@ -29,8 +29,11 @@ class User < ApplicationRecord
 
   class << self
     def digest(string)
-      cost = ActiveModel::SecurePassword.min_cost ? BCrypt::Engine::MIN_COST :
-                                                    BCrypt::Engine.cost
+      cost = if ActiveModel::SecurePassword.min_cost
+               BCrypt::Engine::MIN_COST
+             else
+               BCrypt::Engine.cost
+             end
       BCrypt::Password.create(string, cost: cost)
     end
 
@@ -40,13 +43,14 @@ class User < ApplicationRecord
 
     def remember_token_authenticated?(user, remember_token)
       return false if user.remember_digest.nil?
+
       BCrypt::Password.new(user.remember_digest).is_password?(remember_token)
     end
   end
 
   def remember!
     @remember_token = User.new_token
-    #　updateにしたかったが、passwordのvalidationにどうしても引っかかる
+    # 　updateにしたかったが、passwordのvalidationにどうしても引っかかる
     update_attribute(:remember_digest, User.digest(@remember_token))
   end
 
