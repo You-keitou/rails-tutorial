@@ -66,4 +66,5 @@ RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
   # support helper
   config.include FillUserFormHelper
+  config.include LoginUserHelper
 end
