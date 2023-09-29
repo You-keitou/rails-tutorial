@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-def fill_in_login_form user_attributes
+def fill_in_login_form(user_attributes)
   fill_in 'session[email]', with: user_attributes[:email]
   fill_in 'session[password]', with: user_attributes[:password]
 end

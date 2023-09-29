@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-def fill_in_login_form user_attributes
+def fill_in_login_form(user_attributes)
   fill_in 'session[email]', with: user_attributes[:email]
   fill_in 'session[password]', with: user_attributes[:password]
 end
@@ -12,12 +12,12 @@ RSpec.describe 'login_page e2eテスト', type: :system, js: true do
 
   describe 'loginフォーム' do
     context '入力が無効であるとき' do
-      let!(:invalid_user_attributes) {
+      let!(:invalid_user_attributes) do
         {
           email: 'k.you@ingage.jp',
           password: '222'
         }
-      }
+      end
       it 'エラーが表示されること' do
         visit login_path
         fill_in_login_form invalid_user_attributes
@@ -42,21 +42,21 @@ RSpec.describe 'login_page e2eテスト', type: :system, js: true do
     end
 
     context '入力が有効であること' do
-      let!(:new_user) {
+      let!(:new_user) do
         User.create({
-          name: 'keito',
-          email: 'youkeitou327@gmail.com',
-          password: '123456',
-          password_confirmation: '123456'
-        })
-      }
+                      name: 'keito',
+                      email: 'youkeitou327@gmail.com',
+                      password: '123456',
+                      password_confirmation: '123456'
+                    })
+      end
       it 'ユーザーページにリダイレクトされること' do
         p new_user.password_digest
         visit login_path
         fill_in_login_form({
-          email: new_user.email,
-          password: "123456"
-        })
+                             email: new_user.email,
+                             password: '123456'
+                           })
         expect { click_button 'Log in' }.to change { current_path }.from(login_path).to(user_path(new_user))
       end
     end

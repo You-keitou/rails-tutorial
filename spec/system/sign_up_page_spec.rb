@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 # RSpect helper
-def fill_in_sign_up_form user_attributes
+def fill_in_sign_up_form(user_attributes)
   fill_in 'user[name]', with: user_attributes[:name]
   fill_in 'user[email]', with: user_attributes[:email]
   fill_in 'user[password]', with: user_attributes[:password]
