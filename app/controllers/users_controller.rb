@@ -1,8 +1,12 @@
 class UsersController < ApplicationController
-  before_action :redirect_to_based_on_login_status, only: [:edit, :update]
+  before_action :redirect_to_based_on_login_status, only: [:index, :edit, :update]
 
   def new
     @user = User.new
+  end
+
+  def index
+    @users = User.all
   end
 
   def show
@@ -45,6 +49,7 @@ class UsersController < ApplicationController
         flash[:danger] = 'Please log in.'
         redirect_to login_path
       else
+        return if params[:id].nil?
         user_edit_requested = User.find(params[:id])
         if user_edit_requested.id != current_user.id
           flash[:danger] = "You are not allowed to access this page."
