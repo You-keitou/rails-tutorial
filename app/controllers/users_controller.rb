@@ -41,6 +41,7 @@ class UsersController < ApplicationController
 
     def redirect_to_based_on_login_status
       if current_user.nil?
+        store_location
         flash[:danger] = 'Please log in.'
         redirect_to login_path
       else
