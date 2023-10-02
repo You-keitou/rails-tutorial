@@ -32,8 +32,8 @@ RSpec.describe 'Sessions_controller', type: :request do
   end
 
   describe 'DELETE /login' do
-    let!(:user_attributes) { attributes_for(:testuser) }
-    let!(:user) { create(:testuser, user_attributes) }
+    let(:user_attributes) { attributes_for(:testuser) }
+    let(:user) { create(:testuser, user_attributes) }
     it 'ログイン状態からログアウト状態になること' do
       post login_path, params: {
         session: user_attributes.slice(:email, :password)
