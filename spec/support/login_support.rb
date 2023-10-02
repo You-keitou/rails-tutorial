@@ -7,6 +7,13 @@ module LoginSupport
      fill_in 'Password', with: user.password
      click_button 'Log in'
    end
+
+   def fill_in_edit_form(user)
+     fill_in 'Name', with: user.name
+     fill_in 'Email', with: user.email
+     fill_in 'Password', with: user.password
+     fill_in 'Confirmation', with: user.password_confirmation
+   end
  end
 
  module Request
