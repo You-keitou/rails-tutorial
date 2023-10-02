@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  before_action :redirect_to_based_on_login_status, only: [:edit, :update]
+
   def new
     @user = User.new
   end
@@ -33,7 +35,21 @@ class UsersController < ApplicationController
   end
   private
 
-  def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
-  end
+    def user_params
+      params.require(:user).permit(:name, :email, :password, :password_confirmation)
+    end
+
+    def redirect_to_based_on_login_status
+      if current_user.nil?
+        flash[:danger] = 'Please log in.'
+        redirect_to login_path
+      else
+        user_edit_requested = User.find(params[:id])
+        if user_edit_requested.id != current_user.id
+          flash[:danger] = "You are not allowed to access this page."
+          redirect_to root_url
+        end
+      end
+    end
+
 end
