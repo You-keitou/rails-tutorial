@@ -85,6 +85,36 @@ RSpec.describe 'Users_controller', type: :request do
     end
   end
 
+  describe 'get /users/[:id]/edit' do
+    context '未ログインの時' do
+      let(:user) {create(:testuser)}
+      it 'Please log in というflashが表示されること' do
+        get edit_user_path(user)
+        expect(flash).to_not be_empty
+      end
+
+      it 'loginページにリダイレクトされること' do
+        get edit_user_path(user)
+        expect(response).to redirect_to login_path
+      end
+    end
+
+    context 'ログイン時' do
+      let(:user) {create(:testuser)}
+      let(:other_user) {create(:testuser)}
+      it '正しいユーザーである時、正しく編集ページが表示されること' do
+        log_in(user)
+        get edit_user_path(user)
+        expect(response.body).to include full_title('Edit user')
+      end
+      it '正しくユーザーであるときは、flashが表示されること' do
+        log_in(user)
+        get edit_user_path(other_user)
+        expect(flash).to_not be_empty
+      end
+    end
+  end
+
   describe 'title /signup' do
     it "title が #{full_title('Sign up')}となっていること" do
       get signup_path
@@ -92,3 +122,9 @@ RSpec.describe 'Users_controller', type: :request do
     end
   end
 end
+
+# なぜかここに宣言するとエラーになる？なんでなんでしょうかね？
+#  def log_in(user)
+#    post login_path, params: { session: { email: user.email,
+#                                          password: user.password } }
+#  end
