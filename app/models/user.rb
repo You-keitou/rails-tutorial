@@ -56,13 +56,16 @@ class User < ApplicationRecord
   def remember!
     @remember_token = User.new_token
     # 　updateにしたかったが、passwordのvalidationにどうしても引っかかる
-    update_attribute(:remember_digest, User.digest(@remember_token))
+    update(remember_digest: User.digest(@remember_token))
   end
 
   def forget!
-    update_attribute(:remember_digest, nil)
+    update(remember_digest: nil)
   end
 
+  def activate
+    update(activated: true, activated_at: Time.zone.now)
+  end
   private
 
   def create_activation_digest
