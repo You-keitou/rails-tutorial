@@ -1,6 +1,7 @@
 class UsersController < ApplicationController
   before_action :redirect_based_on_login_status, except: [:new, :create]
   before_action :redirect_based_on_logged_in_user, only: [:update, :edit]
+  before_action :redirect_based_on_admin, only: :delete
 
   def new
     @user = User.new
@@ -39,6 +40,15 @@ class UsersController < ApplicationController
     end
   end
 
+  def destroy
+   if User.find(params[:id]).destroy
+    flash[:success] = 'User deleted'
+    redirect_to users_path
+   else
+    flash[:danger] = 'Fail to delete user'
+   end
+  end
+
   private
 
   def user_params
@@ -61,5 +71,9 @@ class UsersController < ApplicationController
 
     flash[:danger] = 'You are not allowed to access this page.'
     redirect_to root_url
+  end
+
+  def redirect_based_on_admin
+    redirect_to(root_url) unless current_user.admin?
   end
 end
