@@ -50,8 +50,8 @@ class UsersController < ApplicationController
         redirect_to login_path
       else
         return if params[:id].nil?
-        user_edit_requested = User.find(params[:id])
-        if user_edit_requested.id != current_user.id
+        user_requested = User.find(params[:id])
+        if user_requested.id != current_user.id
           flash[:danger] = "You are not allowed to access this page."
           redirect_to root_url
         end
