@@ -87,7 +87,7 @@ RSpec.describe 'Users_controller', type: :request do
 
   describe 'get /users/[:id]/edit' do
     context '未ログインの時' do
-      let(:user) {create(:testuser)}
+      let(:user) { create(:testuser) }
       it 'Please log in というflashが表示されること' do
         get edit_user_path(user)
         expect(flash).to_not be_empty
@@ -100,17 +100,38 @@ RSpec.describe 'Users_controller', type: :request do
     end
 
     context 'ログイン時' do
-      let(:user) {create(:testuser)}
-      let(:other_user) {create(:testuser)}
+      let(:user) { create(:testuser) }
+      let(:other_user) { create(:testuser) }
       it '正しいユーザーである時、正しく編集ページが表示されること' do
         log_in(user)
         get edit_user_path(user)
         expect(response.body).to include full_title('Edit user')
       end
-      it '正しくユーザーであるときは、flashが表示されること' do
+      it '他のユーザーのプロフィールを編集しようとするときは、flashが表示されること' do
         log_in(user)
         get edit_user_path(other_user)
         expect(flash).to_not be_empty
+      end
+    end
+  end
+
+  describe 'patch /users/[:id]' do
+    context '未ログインの時' do
+      let(:user) { create(:testuser) }
+      it 'Please log in というflashが表示されること' do
+        patch user_path(user), params: { user: { name: 'keito',
+                                                 email: 'aaa@example.com'  } }
+        expect(flash).to_not be_empty
+      end
+    end
+    context 'ログイン時' do
+      let(:user) { create(:testuser) }
+      it '正しいユーザーである時、正しく編集されること' do
+        log_in(user)
+        patch user_path(user), params: { user: { name: 'keito',
+                                                 email: 'you@example.com'  } }
+        expect(user.reload.name).to eq 'keito'
+        expect(user.reload.email).to eq 'you@example.com'
       end
     end
   end
