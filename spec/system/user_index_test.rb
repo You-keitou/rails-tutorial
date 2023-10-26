@@ -15,6 +15,11 @@ RSpec.describe 'ユーザー一覧ページ', type: :system, js: true do
   end
 
   describe 'ログインしている状態' do
+    before do
+      30.times do
+        create(:testuser)
+      end
+    end
     let(:user) { create(:testuser) }
     it 'paginationのボタンが表示されていること' do
       log_in(user)

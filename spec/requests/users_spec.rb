@@ -133,6 +133,23 @@ RSpec.describe 'Users_controller', type: :request do
         expect(user.reload.name).to eq 'keito'
         expect(user.reload.email).to eq 'you@example.com'
       end
+
+      it 'admin属性は更新できないこと' do
+        log_in(user)
+        expect(user.admin).to be false
+        old_email = user.email
+        patch user_path(user), params: {
+          user: {
+            email: "#{old_email}.jp",
+            password: 'password',
+            password_confirmation: 'password',
+            admin: true
+          }
+        }
+        user.reload
+        expect(user.email).to eq "#{old_email}.jp"
+        expect(user.admin).to be false
+      end
     end
   end
 
@@ -150,6 +167,21 @@ RSpec.describe 'Users_controller', type: :request do
         log_in(user)
         get users_path
         expect(response.body).to include full_title('All users')
+      end
+    end
+  end
+
+  describe 'delete /user/[:id]' do
+    let!(:admin) { create(:testuser, :admin_user) }
+    let!(:user) { create(:testuser) }
+    let!(:testuser) { create(:testuser) }
+    # びっくりをつけないと、以下のテストが通らない
+    context '管理者である時' do
+      it '削除ができる' do
+        log_in(admin)
+        expect do
+          delete user_path(testuser)
+        end.to change { User.count }.by(-1)
       end
     end
   end

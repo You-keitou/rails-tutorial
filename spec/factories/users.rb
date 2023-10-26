@@ -28,6 +28,10 @@ FactoryBot.define do
       password_length { 6 }
     end
 
+    trait :admin_user do
+      admin { true }
+    end
+
     trait :email_invalid_character do
       email { invalid_email_maker }
     end
