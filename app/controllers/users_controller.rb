@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  before_action :redirect_to_based_on_login_status, only: [:index, :edit, :update]
+  before_action :redirect_to_based_on_login_status, except: [:new, :create]
 
   def new
     @user = User.new
