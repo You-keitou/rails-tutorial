@@ -33,7 +33,7 @@ Rails.application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
-  host = 'example.com' # ローカル環境
+  host = 'localhost:3000' # ローカル環境
   config.action_mailer.default_url_options = { host: host, protocol: 'http' }
 
   # Print deprecation notices to the stderr.
