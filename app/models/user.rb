@@ -2,14 +2,17 @@
 #
 # Table name: users
 #
-#  id              :bigint           not null, primary key
-#  admin           :boolean          default(FALSE)
-#  email           :string           not null
-#  name            :string           not null
-#  password_digest :string           not null
-#  remember_digest :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id                :bigint           not null, primary key
+#  activated         :boolean          default(FALSE)
+#  activated_at      :datetime
+#  activation_digest :string
+#  admin             :boolean          default(FALSE)
+#  email             :string           not null
+#  name              :string           not null
+#  password_digest   :string           not null
+#  remember_digest   :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 # Indexes
 #
@@ -17,9 +20,10 @@
 #
 class User < ApplicationRecord
   # tutorialでは、accessorにしていたが、外部から書き込みができるようにするべきではないと思った。
-  attr_reader :remember_token
+  attr_reader :remember_token, :activation_token
 
   before_save { self.email = email.downcase }
+  before_create :create_activation_digest
   validates :name, presence: true, length: { maximum: 50 }
   VALID_EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i.freeze
   validates :email, presence: true, length: { maximum: 255 }, format: { with: VALID_EMAIL_REGEX },
@@ -57,5 +61,13 @@ class User < ApplicationRecord
 
   def forget!
     update_attribute(:remember_digest, nil)
+  end
+
+  private
+
+  def create_activation_digest
+    # self.activation_token = ではうまくいかなかった。なぜだろう？
+    @activation_token = User.new_token
+    self.activation_digest = User.digest(activation_token)
   end
 end

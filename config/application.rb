@@ -10,6 +10,7 @@ module App
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.1
+    config.action_mailer.preview_path = "#{Rails.root}/spec/mailers/previews"
     config.autoload_paths += %W(
       #{config.root}/usr/local/bundle/gems/bootstrap-sass-3.3.7
     )
