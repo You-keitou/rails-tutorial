@@ -136,6 +136,24 @@ RSpec.describe 'Users_controller', type: :request do
     end
   end
 
+  describe 'get /users' do
+    context '未ログインの時' do
+      let(:user) { create(:testuser) }
+      it 'Please log in というflashが表示されること' do
+        get users_path
+        expect(flash).to_not be_empty
+      end
+    end
+    context 'ログイン時' do
+      let(:user) { create(:testuser) }
+      it '正しく表示されること' do
+        log_in(user)
+        get users_path
+        expect(response.body).to include full_title('All users')
+      end
+    end
+  end
+
   describe 'title /signup' do
     it "title が #{full_title('Sign up')}となっていること" do
       get signup_path
