@@ -13,10 +13,10 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
-    if @user.activated
-      flash[:danger] = 'This user is not activated'
-      redirect_to root_url
-    end
+    return if @user.activated
+
+    flash[:danger] = 'This user is not activated'
+    redirect_to root_url
   end
 
   def create

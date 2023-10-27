@@ -24,6 +24,8 @@ FactoryBot.define do
     email { Faker::Internet.email }
     password { Faker::Internet.password }
     password_confirmation { password }
+    activated { true }
+    activated_at { Time.zone.now }
 
     transient do
       name_length { 50 }
@@ -33,6 +35,11 @@ FactoryBot.define do
 
     trait :admin_user do
       admin { true }
+    end
+
+    trait :not_activated_user do
+      activated { false }
+      activated_at { nil }
     end
 
     trait :email_invalid_character do

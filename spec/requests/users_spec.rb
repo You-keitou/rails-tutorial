@@ -27,13 +27,6 @@ RSpec.describe 'Users_controller', type: :request do
           }
         end.to change { User.count }.by(1)
       end
-
-      it 'ログイン状態になること' do
-        post signup_path, params: {
-          user: base_user_attributes
-        }
-        expect(logged_in?).to be(true)
-      end
     end
 
     context '名前が無効なユーザー' do
@@ -183,6 +176,24 @@ RSpec.describe 'Users_controller', type: :request do
         get users_path
         expect(response.body).to include full_title('All users')
       end
+    end
+    it 'activateされていないユーザーは表示されないこと' do
+      not_activated_user = create(:testuser, :not_activated_user)
+      user = create(:testuser)
+      log_in(user)
+      get users_path
+      expect(response.body).to include user.name
+      expect(response.body).to_not include not_activated_user.name
+    end
+  end
+
+  describe 'get /user/[:id]' do
+    let(:not_activated_user) { create(:testuser, :not_activated_user) }
+    let(:user) { create(:testuser) }
+    it '有効化されていないユーザーはrootにリダイレクトされること' do
+      log_in(user)
+      get user_path(not_activated_user)
+      expect(response).to redirect_to root_path
     end
   end
 
