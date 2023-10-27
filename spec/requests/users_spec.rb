@@ -83,6 +83,21 @@ RSpec.describe 'Users_controller', type: :request do
         end.to change { User.count }.by(0)
       end
     end
+
+    it 'メールが一件存在すること' do
+      expect do
+        post signup_path, params: {
+          user: base_user_attributes
+        }
+      end.to change { ActionMailer::Base.deliveries.size }.by(1)
+    end
+
+    it 'ユーザーがデフォルトでは有効化されていないこと' do
+      post signup_path, params: {
+        user: base_user_attributes
+      }
+      expect(User.find_by(email: base_user_attributes[:email]).activated).to be false
+    end
   end
 
   describe 'get /users/[:id]/edit' do
