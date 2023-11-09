@@ -76,7 +76,13 @@ RSpec.describe "PasswordResets", type: :request do
       end
     end
     context 'ユーザーがまだ有効化されていない時' do
-
+      let(:not_activated_user){create(:testuser, :not_activated_user)}
+      it 'rootにリダイレクトされること' do
+        not_activated_user.create_reset_digest
+        not_activated_user.update(reset_sent_at: Time.zone.now)
+        get edit_password_reset_path(id: not_activated_user.reset_token, email: not_activated_user.email)
+        expect(response).to redirect_to root_url
+      end
     end
   end
 
