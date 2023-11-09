@@ -1,4 +1,9 @@
 class MicropostsController < ApplicationController
-  def show
+  def create
+
+  end
+
+  def destroy
+
   end
 end
