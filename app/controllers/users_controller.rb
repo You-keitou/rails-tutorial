@@ -60,14 +60,6 @@ class UsersController < ApplicationController
     params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 
-  def redirect_based_on_login_status
-    return unless current_user.nil?
-
-    store_location
-    flash[:danger] = 'Please log in.'
-    redirect_to login_path
-  end
-
   def redirect_based_on_logged_in_user
     return if params[:id].nil?
 
