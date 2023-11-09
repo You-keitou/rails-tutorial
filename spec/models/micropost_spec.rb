@@ -48,4 +48,9 @@ RSpec.describe Micropost, type: :model do
     send(:create_testpost, user: user, posts_count: 10)
     expect(create(:most_recent_post)).to eq Micropost.first
   end
+
+  it 'ユーザーを削除すると、関連する投稿も削除されること' do
+    send(:create_testpost, user: user, posts_count: 1)
+    expect { user.destroy }.to change { Micropost.count }.by(-1)
+  end
 end
