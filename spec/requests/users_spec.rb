@@ -218,7 +218,25 @@ RSpec.describe 'Users_controller', type: :request do
       expect(response.body).to include("<title>#{full_title('Sign up')}</title>")
     end
   end
+
+  describe 'get action /user/[:id]/follow' do
+    let(:user) { create(:testuser) }
+    it 'ログインしていないとき、ログインページにリダイレクトされること' do
+      get following_user_path(user)
+      expect(response).to redirect_to login_path
+    end
+  end
+
+  describe 'get action /user/[:id]/follower' do
+    let(:user) { create(:testuser) }
+    it 'ログインしていないとき、ログインページにリダイレクトされること' do
+      get followers_user_path(user)
+      expect(response).to redirect_to login_path
+    end
+  end
 end
+
+
 
 # なぜかここに宣言するとエラーになる？なんでなんでしょうかね？
 #  def log_in(user)
