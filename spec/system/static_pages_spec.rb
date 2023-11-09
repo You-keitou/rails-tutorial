@@ -34,4 +34,44 @@ RSpec.describe 'StaticPages', type: :system, js: true do
       expect(page).to have_link 'About', href: about_path
     end
   end
+
+  describe 'Home' do
+    let(:user) { create(:testuser) }
+    before do
+      send(:create_testpost, user: user, posts_count: 35)
+      log_in(user)
+      visit root_path
+    end
+
+    it 'ページネーションのラッパータグが表示されていること' do
+      expect(page).to have_selector 'div.pagination'
+    end
+
+    context '有効なマイクロポストが投稿された時' do
+      it '投稿が一件増えること' do
+        fill_in 'micropost[content]', with: 'Lorem ipsum'
+        expect do
+          click_button 'Post'
+        end.to change(Micropost, :count).by(1)
+      end
+    end
+
+    context '無効なマイクロポストが投稿された時' do
+      it '投稿が増えないこと' do
+        expect do
+          click_button 'Post'
+        end.to change(Micropost, :count).by(0)
+      end
+    end
+
+    context '投稿の削除ボタンを押した時' do
+      it '投稿が一件減ること' do
+        expect(page).to have_link 'delete'
+        expect do
+          click_link 'delete', href: micropost_path(user.microposts.first)
+        end.to change(Micropost, :count).by(-1)
+      end
+    end
+  end
+
 end

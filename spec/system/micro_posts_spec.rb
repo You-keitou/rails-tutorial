@@ -7,7 +7,7 @@ RSpec.describe 'Microposts', type: :system, js: true do
 
   let(:user) { create(:testuser) }
 
-  describe 'ユーザーの一覧ページ' do
+  describe 'ユーザーの詳細ページ' do
     before do
       log_in(user)
     end
@@ -39,6 +39,13 @@ RSpec.describe 'Microposts', type: :system, js: true do
       send(:create_testpost, user: user, posts_count: 35)
       visit user_path(user)
       expect(page).to have_selector 'div.pagination'
+    end
+
+    it '他のユーザーのマイクロポストを削除することができないこと' do
+      other_user = create(:testuser)
+      send(:create_testpost, user: other_user, posts_count: 1)
+      visit user_path(other_user)
+      expect(page).not_to have_link 'delete'
     end
   end
 end
