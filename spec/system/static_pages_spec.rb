@@ -72,6 +72,21 @@ RSpec.describe 'StaticPages', type: :system, js: true do
         end.to change(Micropost, :count).by(-1)
       end
     end
+
+    it '投稿件数が35件と表示されていること' do
+      expect(page).to have_selector 'span', text: '35 microposts'
+    end
+
+    it '投稿に画像が添付できること' do
+      expect do
+        fill_in 'micropost[content]', with: 'Lorem ipsum'
+        attach_file 'micropost[picture]', "#{Rails.root}/spec/factories/test.jpg"
+        click_button 'Post'
+      end.to change(Micropost, :count).by(1)
+
+      visit root_path
+      expect(page).to have_selector 'img'
+    end
   end
 
 end
