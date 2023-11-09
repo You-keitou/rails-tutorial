@@ -18,8 +18,18 @@
 #  fk_rails_...  (user_id => users.id)
 #
 FactoryBot.define do
-  factory :micropost do
-    content { "MyText" }
-    user { nil }
+  factory :testpost, class: Micropost do
+    content {Faker::Lorem.sentence}
+    created_at {Faker::Time.between(from: 10.days.ago, to: Time.zone.now)}
   end
+
+  factory :most_recent_post, class: Micropost do
+    content {Faker::Lorem.sentence}
+    created_at {Time.zone.now}
+    user_id {User.first.id}
+  end
+end
+
+def create_testpost(user: , posts_count: 10)
+  FactoryBot.create_list(:testpost, posts_count, user: user)
 end

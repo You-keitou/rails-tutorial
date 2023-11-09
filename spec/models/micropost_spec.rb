@@ -43,4 +43,9 @@ RSpec.describe Micropost, type: :model do
       expect(micropost).not_to be_valid
     end
   end
+
+  it '最新の投稿が最初に表示されること' do
+    send(:create_testpost, user: user, posts_count: 10)
+    expect(create(:most_recent_post)).to eq Micropost.first
+  end
 end
