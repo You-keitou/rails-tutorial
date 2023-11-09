@@ -20,5 +20,27 @@
 require 'rails_helper'
 
 RSpec.describe Micropost, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:user) { create(:testuser) }
+  let(:micropost) { user.microposts.build(content: 'Lorem ipsum') }
+
+  it '有効であること' do
+    expect(micropost).to be_valid
+  end
+
+  it 'user_idがnilの場合、無効であること' do
+    micropost.user_id = nil
+    expect(micropost).not_to be_valid
+  end
+
+  describe 'content' do
+    it '空白の場合、無効であること' do
+      micropost.content = ' '
+      expect(micropost).not_to be_valid
+    end
+
+    it '140文字を超える場合、無効であること' do
+      micropost.content = 'a' * 141
+      expect(micropost).not_to be_valid
+    end
+  end
 end
