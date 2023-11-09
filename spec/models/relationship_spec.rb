@@ -17,5 +17,38 @@
 require 'rails_helper'
 
 RSpec.describe Relationship, type: :model do
-  pending "add some examples to (or delete) #{__FILE__}"
+  let(:user1) { create(:testuser) }
+  let(:user2) { create(:testuser) }
+  let(:relationship) { Relationship.new(follower_id: user1.id, followed_id: user2.id) }
+  describe 'バリデーション' do
+    it 'follower_idとfollowed_idがあれば有効な状態であること' do
+      expect(relationship).to be_valid
+    end
+
+    it 'follower_idがなければ無効な状態であること' do
+      relationship.follower_id = nil
+      expect(relationship).not_to be_valid
+    end
+
+    it 'followed_idがなければ無効な状態であること' do
+      relationship.followed_id = nil
+      expect(relationship).not_to be_valid
+    end
+  end
+
+  describe 'アソシエーション' do
+    it 'フォローが有効であること' do
+      expect(user1.following).not_to include(user2)
+      user1.follow!(user2)
+      user1.reload
+      expect(user1.following).to include(user2)
+    end
+
+    it 'フォロー解除が有効であること' do
+      relationship.save
+      user1.unfollow!(user2)
+      user1.reload
+      expect(user1.following).not_to include(user2)
+    end
+  end
 end
