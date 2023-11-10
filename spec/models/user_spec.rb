@@ -140,4 +140,40 @@ RSpec.describe User, type: :model do
       expect(user.authenticated?(:remember, '')).to be(false)
     end
   end
+
+  describe '#feed' do
+    let(:user) { create(:testuser) }
+    let(:following_users) {
+      Array.new(5).map {
+        create(:testuser)
+      }
+    }
+
+    before do
+      following_users.each do |other_user|
+        user.follow!(other_user)
+        send(:create_testpost, user: other_user, posts_count: 5)
+      end
+    end
+
+    it "フォローしているユーザーの投稿が表示されること" do
+      user.microposts.each do |post_self|
+        except(user.feed.include?(post_self)).to be true
+      end
+    end
+
+    it "自分自身の投稿が表示されること" do
+      user.microposts.each do |post_self|
+        expect(user.feed.include?(post_self)).to be true
+      end
+    end
+
+    it 'フォローしていないユーザーの投稿は表示されないこと' do
+      not_follow_user = create(:testuser)
+      send(:create_testpost, user: not_follow_user, posts_count: 5)
+      not_follow_user.microposts.each do |unfollow_post|
+        expect(user.microposts.include?(unfollow_post)).to be false
+      end
+    end
+  end
 end
