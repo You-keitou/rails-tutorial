@@ -85,6 +85,107 @@ RSpec.describe 'Users_controller', type: :request do
     end
   end
 
+  describe 'get /users/[:id]/edit' do
+    context '未ログインの時' do
+      let(:user) { create(:testuser) }
+      it 'Please log in というflashが表示されること' do
+        get edit_user_path(user)
+        expect(flash).to_not be_empty
+      end
+
+      it 'loginページにリダイレクトされること' do
+        get edit_user_path(user)
+        expect(response).to redirect_to login_path
+      end
+    end
+
+    context 'ログイン時' do
+      let(:user) { create(:testuser) }
+      let(:other_user) { create(:testuser) }
+      it '正しいユーザーである時、正しく編集ページが表示されること' do
+        log_in(user)
+        get edit_user_path(user)
+        expect(response.body).to include full_title('Edit user')
+      end
+      it '他のユーザーのプロフィールを編集しようとするときは、flashが表示されること' do
+        log_in(user)
+        get edit_user_path(other_user)
+        expect(flash).to_not be_empty
+      end
+    end
+  end
+
+  describe 'patch /users/[:id]' do
+    context '未ログインの時' do
+      let(:user) { create(:testuser) }
+      it 'Please log in というflashが表示されること' do
+        patch user_path(user), params: { user: { name: 'keito',
+                                                 email: 'aaa@example.com'  } }
+        expect(flash).to_not be_empty
+      end
+    end
+    context 'ログイン時' do
+      let(:user) { create(:testuser) }
+      it '正しいユーザーである時、正しく編集されること' do
+        log_in(user)
+        patch user_path(user), params: { user: { name: 'keito',
+                                                 email: 'you@example.com'  } }
+        expect(user.reload.name).to eq 'keito'
+        expect(user.reload.email).to eq 'you@example.com'
+      end
+
+      it 'admin属性は更新できないこと' do
+        log_in(user)
+        expect(user.admin).to be false
+        old_email = user.email
+        patch user_path(user), params: {
+          user: {
+            email: "#{old_email}.jp",
+            password: 'password',
+            password_confirmation: 'password',
+            admin: true
+          }
+        }
+        user.reload
+        expect(user.email).to eq "#{old_email}.jp"
+        expect(user.admin).to be false
+      end
+    end
+  end
+
+  describe 'get /users' do
+    context '未ログインの時' do
+      let(:user) { create(:testuser) }
+      it 'Please log in というflashが表示されること' do
+        get users_path
+        expect(flash).to_not be_empty
+      end
+    end
+    context 'ログイン時' do
+      let(:user) { create(:testuser) }
+      it '正しく表示されること' do
+        log_in(user)
+        get users_path
+        expect(response.body).to include full_title('All users')
+      end
+    end
+  end
+
+  describe 'delete /user/[:id]' do
+    let!(:admin) { create(:testuser, :admin_user) }
+    let!(:user) { create(:testuser) }
+    let!(:testuser) { create(:testuser) }
+    # びっくりをつけないと、以下のテストが通らない
+    context '管理者である時' do
+      it '削除ができる' do
+        log_in(admin)
+        expect do
+          delete user_path(testuser)
+        end.to change { User.count }.by(-1)
+      end
+    end
+  end
+
   describe 'title /signup' do
     it "title が #{full_title('Sign up')}となっていること" do
       get signup_path
@@ -92,3 +193,9 @@ RSpec.describe 'Users_controller', type: :request do
     end
   end
 end
+
+# なぜかここに宣言するとエラーになる？なんでなんでしょうかね？
+#  def log_in(user)
+#    post login_path, params: { session: { email: user.email,
+#                                          password: user.password } }
+#  end

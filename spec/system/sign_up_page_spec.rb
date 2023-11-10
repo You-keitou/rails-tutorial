@@ -77,7 +77,7 @@ RSpec.describe 'Signup Page e2e test', type: :system, js: true do
         fill_in_form(base_user_attributes)
         expect do
           click_button 'Create my account'
-        end.to change(User, :count).by(1)
+        end.to change { User.count }.by(1)
       end
       it 'リダイレクトされる' do
         visit signup_path

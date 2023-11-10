@@ -3,6 +3,7 @@
 # Table name: users
 #
 #  id              :bigint           not null, primary key
+#  admin           :boolean          default(FALSE)
 #  email           :string           not null
 #  name            :string           not null
 #  password_digest :string           not null
@@ -25,6 +26,10 @@ FactoryBot.define do
       name_length { 50 }
       email_length { 255 }
       password_length { 6 }
+    end
+
+    trait :admin_user do
+      admin { true }
     end
 
     trait :email_invalid_character do
