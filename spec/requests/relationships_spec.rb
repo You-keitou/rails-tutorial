@@ -6,9 +6,8 @@ RSpec.describe "Relationships", type: :request do
       let (:user) { create(:testuser) }
       let (:other_user) { create(:testuser) }
       it "ログインページにリダイレクトすること" do
-        expect do
-          post relationships_path, params: { followed_id: other_user.id }
-        end.to redirect_to login_path
+      post relationships_path, params: { followed_id: other_user.id }
+      expect(response).to redirect_to login_path
       end
 
       it "フォローできないこと" do
@@ -44,9 +43,8 @@ RSpec.describe "Relationships", type: :request do
       let(:other_user) { create(:testuser) }
       it "ログインページにリダイレクトすること" do
         user.follow!(other_user)
-        expect do
-          delete relationship_path(other_user.id)
-        end.to redirect_to login_path
+        delete relationship_path(user.active_relationships.find_by(followed_id: other_user).id)
+        expect(response).to redirect_to login_path
       end
     end
 
@@ -54,11 +52,12 @@ RSpec.describe "Relationships", type: :request do
       let(:user) { create(:testuser) }
       let(:other_user) { create(:testuser) }
       it "フォロー解除できること" do
+        log_in(user)
         user.follow!(other_user)
-        user.reload
         expect do
-          delete relationship_path(other_user.id)
+            delete relationship_path(user.active_relationships.find_by(followed_id: other_user).id)
         end.to change{ user.following.count }.by(-1)
+        expect(user.following.include?(other_user)).to be false
       end
     end
   end
