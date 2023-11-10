@@ -31,7 +31,7 @@ end
 
 RSpec.configure do |config|
   include ApplicationHelper
-
+  include SessionsHelper
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = Rails.root.join('spec/fixtures').to_s
 

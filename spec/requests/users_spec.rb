@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'Users', type: :request do
+RSpec.describe 'Users_controller', type: :request do
   let(:base_title) { 'Ruby on Rails Tutorial Sample App' }
 
   describe 'GET /signup' do
@@ -26,6 +26,13 @@ RSpec.describe 'Users', type: :request do
             user: base_user_attributes
           }
         end.to change { User.count }.by(1)
+      end
+
+      it 'ログイン状態になること' do
+        post signup_path, params: {
+          user: base_user_attributes
+        }
+        expect(logged_in?).to be(true)
       end
     end
 
