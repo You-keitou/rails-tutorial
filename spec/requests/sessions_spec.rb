@@ -43,4 +43,23 @@ RSpec.describe 'Sessions_controller', type: :request do
       expect(current_user).to be_nil
     end
   end
+
+  describe 'remember me' do
+    let!(:user_attributes) { attributes_for(:testuser) }
+    let!(:user) { create(:testuser, user_attributes) }
+    it 'ONの場合はcookies[:remember_token]が空でないこと' do
+      user_attributes[:remember_me] = '1'
+      post login_path, params: {
+        session: user_attributes.slice(:email, :password, :remember_me)
+      }
+      expect(cookies[:remember_token]).not_to be_blank
+    end
+    it 'OFFの場合はcookies[:remember_token]が空であること' do
+      user_attributes[:remember_me] = '0'
+      post login_path, params: {
+        session: user_attributes.slice(:email, :password, :remember_me)
+      }
+      expect(cookies[:remember_token]).to be_blank
+    end
+  end
 end

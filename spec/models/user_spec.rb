@@ -6,6 +6,7 @@
 #  email           :string           not null
 #  name            :string           not null
 #  password_digest :string           not null
+#  remember_digest :string
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #
@@ -123,6 +124,14 @@ RSpec.describe User, type: :model do
       it 'validationエラーが出ること' do
         expect(user.invalid?).to be(true)
       end
+    end
+  end
+
+  describe 'remember_token_authenticated?の動作確認' do
+    let(:user) { build(:testuser) }
+    it 'remember_tokenがnilであるときはfalseを返すこと' do
+      expect(user.remember_token).to be_nil
+      expect(User.remember_token_authenticated?(user, ''))
     end
   end
 end

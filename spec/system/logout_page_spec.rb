@@ -6,8 +6,10 @@ def fill_in_login_form(user_attributes)
 end
 
 RSpec.describe 'logout e2eテスト', type: :system, js: true do
+  let!(:user_attributes) { attributes_for(:testuser) }
+  let!(:user) { create(:testuser, user_attributes) }
   before do
-    driven_by(:rack_test)
+    driven_by :rack_test
   end
   let(:base_user_attributes) do
     {
@@ -29,5 +31,20 @@ RSpec.describe 'logout e2eテスト', type: :system, js: true do
         expect(page).not_to have_link 'Log out', href: logout_path
       end
     end
+
+    # context '二つのタブからログイン状態' do
+    #   it '一つのタブでログアウトすると、もう一つのタブでもログアウト状態になること' do
+    #     # 二つ目のタブを開く
+    #     switch_to_window open_new_window
+    #     visit login_path
+    #     fill_in_form(user_attributes, login_form: true)
+    #     find('input[name="commit"]').click
+    #     click_link 'Log out'
+    #     # 一つ目のタブに戻って、ページを更新
+    #     switch_to_window window[0]
+    #     visit current_path
+    #     expect(page).to have_link 'Log in', href: login_path
+    #   end
+    # end
   end
 end
