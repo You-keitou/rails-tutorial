@@ -28,10 +28,17 @@ RSpec.describe "Relationships", type: :request do
         expect(user.following?(other_user)).to be true
       end
 
-      it "relationShipが作成されること" do
+      it "relationShipレコードが作成されること" do
         log_in(user)
         expect do
           post relationships_path, params: { followed_id: other_user.id }
+        end.to change{ Relationship.count }.by(1)
+      end
+
+      it "Ajaxでも登録できること" do
+        log_in(user)
+        expect do
+          post relationships_path, params: { followed_id: other_user.id }, xhr: true
         end.to change{ Relationship.count }.by(1)
       end
     end
@@ -58,6 +65,14 @@ RSpec.describe "Relationships", type: :request do
             delete relationship_path(user.active_relationships.find_by(followed_id: other_user).id)
         end.to change{ user.following.count }.by(-1)
         expect(user.following.include?(other_user)).to be false
+      end
+
+      it "Ajaxでも解除できること" do
+        log_in(user)
+        user.follow!(other_user)
+        expect do
+          delete relationship_path(user.active_relationships.find_by(followed_id: other_user).id), xhr: true
+        end.to change(Relationship, :count).by(-1)
       end
     end
   end
