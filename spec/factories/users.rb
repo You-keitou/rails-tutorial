@@ -2,14 +2,17 @@
 #
 # Table name: users
 #
-#  id              :bigint           not null, primary key
-#  admin           :boolean          default(FALSE)
-#  email           :string           not null
-#  name            :string           not null
-#  password_digest :string           not null
-#  remember_digest :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id                :bigint           not null, primary key
+#  activated         :boolean          default(FALSE)
+#  activated_at      :datetime
+#  activation_digest :string
+#  admin             :boolean          default(FALSE)
+#  email             :string           not null
+#  name              :string           not null
+#  password_digest   :string           not null
+#  remember_digest   :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 # Indexes
 #
@@ -21,6 +24,8 @@ FactoryBot.define do
     email { Faker::Internet.email }
     password { Faker::Internet.password }
     password_confirmation { password }
+    activated { true }
+    activated_at { Time.zone.now }
 
     transient do
       name_length { 50 }
@@ -30,6 +35,11 @@ FactoryBot.define do
 
     trait :admin_user do
       admin { true }
+    end
+
+    trait :not_activated_user do
+      activated { false }
+      activated_at { nil }
     end
 
     trait :email_invalid_character do

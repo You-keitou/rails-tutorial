@@ -1,8 +1,8 @@
 module SessionsHelper
   # ユーザー検証
-  def authenticate_user!
-    if current_user.nil? && (remembered_user && User.remember_token_authenticated?(remembered_user,
-                                                                                   cookies[:remember_token]))
+  def verificate_user!
+    if current_user.nil? && remembered_user&.authenticated?(:remember,
+                                                            cookies[:remember_token])
       log_in(remembered_user)
     end
   end

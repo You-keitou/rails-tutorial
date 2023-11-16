@@ -40,14 +40,14 @@ RSpec.describe 'Signup Page e2e test', type: :system, js: true do
     end
 
     shared_examples 'エラーが発生する' do
-      it 'エラーが表示される' do
+      it 'エラーが表示されること' do
         visit signup_path
         fill_in_form(invalid_user_attributes)
         find('input[name="commit"]').click
         expect(page).to have_content('The form contains 1 error.')
       end
 
-      it 'ユーザーは登録されない' do
+      it 'ユーザーは登録されないこと' do
         visit signup_path
         fill_in_form(invalid_user_attributes)
         expect do
@@ -72,24 +72,24 @@ RSpec.describe 'Signup Page e2e test', type: :system, js: true do
     end
 
     context '有効なユーザーが送信されたとき' do
-      it 'ユーザーが登録される' do
+      it 'ユーザーが登録されること' do
         visit signup_path
         fill_in_form(base_user_attributes)
         expect do
           click_button 'Create my account'
         end.to change { User.count }.by(1)
       end
-      it 'リダイレクトされる' do
+      it 'リダイレクトされること' do
         visit signup_path
         fill_in_form(base_user_attributes)
         find('input[name="commit"]').click
-        expect(current_path).to eq(user_path(User.find_by(email: base_user_attributes[:email])))
+        expect(current_path).to eq(root_path)
       end
-      it '成功のflashが出る' do
+      it 'メールをチェックするアラートが出ること' do
         visit signup_path
         fill_in_form(base_user_attributes)
         find('input[name="commit"]').click
-        expect(page).to have_selector 'div', class: 'alert-success'
+        expect(page).to have_selector 'div', class: 'alert-info'
       end
     end
   end

@@ -2,14 +2,17 @@
 #
 # Table name: users
 #
-#  id              :bigint           not null, primary key
-#  admin           :boolean          default(FALSE)
-#  email           :string           not null
-#  name            :string           not null
-#  password_digest :string           not null
-#  remember_digest :string
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
+#  id                :bigint           not null, primary key
+#  activated         :boolean          default(FALSE)
+#  activated_at      :datetime
+#  activation_digest :string
+#  admin             :boolean          default(FALSE)
+#  email             :string           not null
+#  name              :string           not null
+#  password_digest   :string           not null
+#  remember_digest   :string
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
 #
 # Indexes
 #
@@ -128,11 +131,11 @@ RSpec.describe User, type: :model do
     end
   end
 
-  describe 'remember_token_authenticated?の動作確認' do
+  describe 'authenticated?の動作確認' do
     let(:user) { build(:testuser) }
     it 'remember_tokenがnilであるときはfalseを返すこと' do
       expect(user.remember_token).to be_nil
-      expect(User.remember_token_authenticated?(user, ''))
+      expect(user.authenticated?(:remember, '')).to be(false)
     end
   end
 end

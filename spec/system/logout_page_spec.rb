@@ -16,7 +16,9 @@ RSpec.describe 'logout e2eテスト', type: :system, js: true do
       name: 'keito',
       email: 'keitou@gmail.com',
       password: '123456',
-      password_confirmation: '123456'
+      password_confirmation: '123456',
+      activated: true,
+      activated_at: Time.zone.now
     }
   end
   describe 'logout' do

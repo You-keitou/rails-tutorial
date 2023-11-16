@@ -47,17 +47,18 @@ RSpec.describe 'login_page e2eテスト', type: :system, js: true do
                       name: 'keito',
                       email: 'youkeitou327@gmail.com',
                       password: '123456',
-                      password_confirmation: '123456'
+                      password_confirmation: '123456',
+                      activated: true,
+                      activated_at: Time.zone.now
                     })
       end
-      it 'ユーザーページにリダイレクトされること' do
-        p new_user.password_digest
-        visit login_path
+      it 'フォワードフォーディングが成功すること' do
+        visit users_path
         fill_in_login_form({
                              email: new_user.email,
                              password: '123456'
                            })
-        expect { click_button 'Log in' }.to change { current_path }.from(login_path).to(user_path(new_user))
+        expect { click_button 'Log in' }.to change { current_path }.from(login_path).to(users_path)
       end
     end
   end
