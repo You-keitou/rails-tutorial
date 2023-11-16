@@ -25,3 +25,7 @@ User.create!(name: 'Example User',
                activated: true,
                activated_at: Time.zone.now)
 end
+
+99.times do |n|
+  User.first.microposts.create!(content: Faker::Lorem.sentence)
+end
